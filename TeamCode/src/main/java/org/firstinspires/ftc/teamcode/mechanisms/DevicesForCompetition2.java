@@ -1,0 +1,20 @@
+package org.firstinspires.ftc.teamcode.mechanisms;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+public class DevicesForCompetition2 {
+    public DcMotor motor1;
+    public DcMotor motor2;
+
+    public void init(HardwareMap hwMp){
+        motor1 = hwMp.get(DcMotor.class, "motor1");
+        motor2 = hwMp.get(DcMotor.class, "motor2");
+        motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void setMotorSpeed(DcMotor motor, double speed ){
+        motor.setPower(speed);
+    }
+}
