@@ -44,6 +44,10 @@ public class Tele extends OpMode {
     public void loop(){
         telemetry.addData("status", "loop started! Good Luck");
         drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+        telemetry.addData("frontRight", hw.frontRight.getPower());
+        telemetry.addData("frontLeft", hw.frontLeft.getPower());
+        telemetry.addData("backRight", hw.backRight.getPower());
+        telemetry.addData("backLeft", hw.backLeft.getPower());
     }
 
     @Override
