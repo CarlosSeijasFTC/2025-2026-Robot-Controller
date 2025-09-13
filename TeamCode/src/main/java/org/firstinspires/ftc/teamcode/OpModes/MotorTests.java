@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetition;
-import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetition2;
+import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetitionMotors;
 
 @TeleOp(name = "Test Motors Using Controller")
 public class MotorTests extends OpMode {
@@ -12,7 +11,7 @@ public class MotorTests extends OpMode {
     private String motor1activeness;
     private String motor2activeness;
 
-    DevicesForCompetition2 hw = new DevicesForCompetition2();
+    DevicesForCompetitionMotors hw = new DevicesForCompetitionMotors();
 
     @Override
     public void init(){

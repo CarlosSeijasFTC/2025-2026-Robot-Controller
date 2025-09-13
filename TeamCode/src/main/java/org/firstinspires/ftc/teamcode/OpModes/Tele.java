@@ -24,10 +24,11 @@ public class Tele extends OpMode {
         maxPower = Math.max(maxPower, Math.abs(backRightPower));
         maxPower = Math.max(maxPower, Math.abs(backLeftPower));
 
-        hw.setMotorSpeed(hw.frontRight, maxSpeed * (frontRightPower/maxPower));
-        hw.setMotorSpeed(hw.frontLeft, maxSpeed * (frontLeftPower/maxPower));
-        hw.setMotorSpeed(hw.backRight, maxSpeed * (backRightPower/maxPower));
-        hw.setMotorSpeed(hw.backLeft, maxSpeed * (backLeftPower/maxPower));
+        hw.setFrontRightSpeed(maxSpeed * (frontRightPower/maxPower));
+        hw.setFrontLeftSpeed(maxSpeed * (frontLeftPower/maxPower));
+        hw.setBackRightSpeed(maxSpeed * (backRightPower/maxPower));
+        hw.setBackLeftSpeed(maxSpeed * (backLeftPower/maxPower));
+
     }
 
     @Override
@@ -46,10 +47,10 @@ public class Tele extends OpMode {
     public void loop(){
         telemetry.addData("status", "loop started! Good Luck");
         drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-        telemetry.addData("frontRight", hw.frontRight.getPower());
-        telemetry.addData("frontLeft", hw.frontLeft.getPower());
-        telemetry.addData("backRight", hw.backRight.getPower());
-        telemetry.addData("backLeft", hw.backLeft.getPower());
+        telemetry.addData("frontRight", hw.getFrontRightSpeed());
+        telemetry.addData("frontLeft", hw.getFrontLeftSpeed());
+        telemetry.addData("backRight", hw.getBackRightSpeed());
+        telemetry.addData("backLeft", hw.getBackLeftSpeed());
         telemetry.addData("Time Elapsed", getRuntime());
 
         if(getRuntime() > 85 && !endRumble){
