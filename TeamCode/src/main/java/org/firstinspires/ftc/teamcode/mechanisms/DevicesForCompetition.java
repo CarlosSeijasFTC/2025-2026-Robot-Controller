@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.CRServo;
 
 public class DevicesForCompetition {
     private DcMotor frontLeft;
@@ -17,9 +18,10 @@ public class DevicesForCompetition {
     private DcMotor motor4;
     private Servo servo1;
     private Servo servo2;
+    private IMU imu;
 
 
-    public void init(HardwareMap hwMp){
+    public void init( HardwareMap hwMp){
         frontLeft = hwMp.get(DcMotor.class, "frontLeft");
         frontRight = hwMp.get(DcMotor.class, "frontRight");
         backLeft = hwMp.get(DcMotor.class, "backLeft");
@@ -30,6 +32,7 @@ public class DevicesForCompetition {
         motor4 = hwMp.get(DcMotor.class, "motor4");
         servo1 = hwMp.get(Servo.class, "servo1");
         servo2 = hwMp.get(Servo.class, "servo2");
+        imu = hwMp.get(IMU.class, "imu");
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -40,6 +43,8 @@ public class DevicesForCompetition {
         motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
     }
 
     //Set Speed Methods
