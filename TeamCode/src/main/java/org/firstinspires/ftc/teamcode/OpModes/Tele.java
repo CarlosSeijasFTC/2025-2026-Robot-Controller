@@ -56,6 +56,7 @@ public class Tele extends OpMode {
             gamepad1.rumbleBlips(3);
             gamepad2.rumbleBlips(3);
             endRumble = true;
+            telemetry.addLine("Game About to Finish!");
         }
     }
 
