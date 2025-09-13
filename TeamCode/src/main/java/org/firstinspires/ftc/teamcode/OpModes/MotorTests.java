@@ -42,6 +42,7 @@ public class MotorTests extends OpMode {
         telemetry.addData("motor2", motor2activeness);
         telemetry.addData("right stick", gamepad1.right_stick_x + " " + -gamepad1.right_stick_y);
         telemetry.addData("left stick", gamepad1.left_stick_x + " " + -gamepad1.left_stick_y);
+
     }
 
 

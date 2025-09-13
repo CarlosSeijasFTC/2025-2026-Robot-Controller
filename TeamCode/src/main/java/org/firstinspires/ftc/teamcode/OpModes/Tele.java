@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetition;
 
 @TeleOp(name = "Michael is P. Diddy's Son")
 public class Tele extends OpMode {
+
+    boolean endRumble = false;
     DevicesForCompetition hw = new DevicesForCompetition();
     public void drive(double x, double y, double r){
         double frontRightPower = -x + y - r;
@@ -37,6 +39,7 @@ public class Tele extends OpMode {
     @Override
     public void start(){
         telemetry.clearAll();
+        resetRuntime();
     }
 
     @Override
@@ -47,6 +50,13 @@ public class Tele extends OpMode {
         telemetry.addData("frontLeft", hw.frontLeft.getPower());
         telemetry.addData("backRight", hw.backRight.getPower());
         telemetry.addData("backLeft", hw.backLeft.getPower());
+        telemetry.addData("Time Elapsed", getRuntime());
+
+        if(getRuntime() > 85 && !endRumble){
+            gamepad1.rumbleBlips(3);
+            gamepad2.rumbleBlips(3);
+            endRumble = true;
+        }
     }
 
     @Override
