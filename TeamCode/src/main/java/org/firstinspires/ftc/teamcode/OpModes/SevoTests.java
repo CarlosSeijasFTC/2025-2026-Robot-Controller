@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetitionServos;
 
-@TeleOp(name = "Test Servos Using Controller")
+@TeleOp(name = "Test Servos Using Controller", group = "Tests")
 public class SevoTests extends OpMode {
 
     boolean wasA;
