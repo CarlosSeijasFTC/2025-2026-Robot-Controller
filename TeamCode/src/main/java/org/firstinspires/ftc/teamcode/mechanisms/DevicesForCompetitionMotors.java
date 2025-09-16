@@ -12,6 +12,8 @@ public class DevicesForCompetitionMotors {
         motor2 = hwMp.get(DcMotor.class, "motor2");
         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public void setMotorSpeed(DcMotor motor, double speed ){
         motor.setPower(speed);

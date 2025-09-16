@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -18,7 +19,7 @@ public class AprilTagIds extends OpMode {
 
     @Override
     public void init() {
-        WebcamName aprilTags = hardwareMap.get(WebcamName.class, "aprilTags");
+        HuskyLens aprilTags = hardwareMap.get(HuskyLens.class, "aprilTags");
         aprilTagProcessor = AprilTagProcessor.easyCreateWithDefaults();
         visionPortal = VisionPortal.easyCreateWithDefaults(aprilTags, aprilTagProcessor);
     }
@@ -31,6 +32,7 @@ public class AprilTagIds extends OpMode {
             ids.append(" ");
         }
         telemetry.addData("AprilTags", ids);
+        telemetry.addData("Detected Tag", aprilTagProcessor.getFreshDetections());
     }
     @Override
     public void start(){
