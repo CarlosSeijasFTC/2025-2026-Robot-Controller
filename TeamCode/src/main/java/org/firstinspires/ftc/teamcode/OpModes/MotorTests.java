@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetitionMotors;
 
-@TeleOp(name = "Test Motors Using Controller")
+@TeleOp(name = "Test Motors Using Controller", group = "Tests")
 public class MotorTests extends OpMode {
 
     private String motor1activeness;
