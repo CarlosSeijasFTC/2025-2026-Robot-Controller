@@ -19,3 +19,4 @@ public class DevicesForCompetitionMotors {
         motor.setPower(speed);
     }
 }
+//Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

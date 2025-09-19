@@ -10,26 +10,9 @@ public class Tele extends OpMode {
 
     boolean endRumble = false;
     DevicesForCompetition hw = new DevicesForCompetition();
-    public void drive(double x, double y, double r){
-        double frontRightPower = -x + y - r;
-        double frontLeftPower = x + y + r;
-        double backRightPower = x + y - r;
-        double backLeftPower = -x + y + r;
-
-        double maxPower = 1.0;
-        double maxSpeed = 1.0;
-
-        maxPower = Math.max(maxPower, Math.abs(frontRightPower));
-        maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
-        maxPower = Math.max(maxPower, Math.abs(backRightPower));
-        maxPower = Math.max(maxPower, Math.abs(backLeftPower));
-
-        hw.setFrontRightSpeed(maxSpeed * (frontRightPower/maxPower));
-        hw.setFrontLeftSpeed(maxSpeed * (frontLeftPower/maxPower));
-        hw.setBackRightSpeed(maxSpeed * (backRightPower/maxPower));
-        hw.setBackLeftSpeed(maxSpeed * (backLeftPower/maxPower));
-
-    }
+    MecanumDrive Drive = new MecanumDrive();
+    boolean wasRB1;
+    boolean wasLB1;
 
     @Override
     public void init(){
@@ -46,19 +29,36 @@ public class Tele extends OpMode {
     @Override
     public void loop(){
         telemetry.addData("status", "loop started! Good Luck");
-        drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
         telemetry.addData("frontRight", hw.getFrontRightSpeed());
         telemetry.addData("frontLeft", hw.getFrontLeftSpeed());
         telemetry.addData("backRight", hw.getBackRightSpeed());
         telemetry.addData("backLeft", hw.getBackLeftSpeed());
         telemetry.addData("Time Elapsed", getRuntime());
 
-        if(getRuntime() > 85 && !endRumble){
+        if (gamepad1.right_bumper && !wasRB1){
+            Drive.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            telemetry.addData("Drive Mode", "Bot Relative");
+        }else {
+            Drive.driveFieldPerspective(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            telemetry.addData("Drive Mode", "Field Relative");
+        }
+
+        if(gamepad1.left_bumper && !wasLB1){
+            Drive.maxSpeed = 0.5;
+            telemetry.addData("Speed", "slow");
+        }else {
+            Drive.maxSpeed = 1;
+            telemetry.addData("Speed", "normal");
+        }
+
+        /* if(getRuntime() > 85 && !endRumble){
             gamepad1.rumbleBlips(3);
             gamepad2.rumbleBlips(3);
             endRumble = true;
             telemetry.addLine("Game About to Finish!");
-        }
+        }*/
+        wasRB1 = gamepad1.right_bumper;
+        wasLB1 = gamepad1.left_bumper;
     }
 
     @Override
@@ -67,3 +67,4 @@ public class Tele extends OpMode {
         telemetry.addData("status", "stopped");
     }
 }
+//Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

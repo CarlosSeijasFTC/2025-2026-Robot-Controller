@@ -27,3 +27,4 @@ public class   DevicesForCompetitionServos {
         return servo2.getPosition();
     }
 }
+//Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

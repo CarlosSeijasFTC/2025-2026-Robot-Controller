@@ -18,7 +18,7 @@ public class DevicesForCompetition {
     private DcMotor motor4;
     private Servo servo1;
     private Servo servo2;
-    private IMU imu;
+    public IMU imu;
 
 
     public void init( HardwareMap hwMp){
@@ -43,6 +43,9 @@ public class DevicesForCompetition {
         motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
+        imu.initialize(new IMU.Parameters(RevOrientation));
 
 
     }
@@ -109,3 +112,4 @@ public class DevicesForCompetition {
         return motor4.getPower();
     }
 }
+//Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode
