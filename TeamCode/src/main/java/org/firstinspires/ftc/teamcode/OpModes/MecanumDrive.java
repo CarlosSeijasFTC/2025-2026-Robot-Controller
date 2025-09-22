@@ -15,6 +15,7 @@ public class MecanumDrive {
     DevicesForCompetition hw = new DevicesForCompetition();
 
     public void drive(double x, double y, double r){
+        x = x*1.1;
         double frontRightPower = -x + y - r;
         double frontLeftPower = x + y + r;
         double backRightPower = x + y - r;
@@ -33,14 +34,12 @@ public class MecanumDrive {
     }
 
     public void driveFieldPerspective(double x, double y, double r){
-        double angleBot = hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-        double theta = Math.atan2(y, x);
-        double radius = Math.hypot(y, x);
-        theta = AngleUnit.normalizeRadians(theta - angleBot);
-        double newX = radius * Math.cos(theta);
-        double newY = radius * Math.sin(theta);
+        double angle = hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        angle = AngleUnit.normalizeRadians(angle);
+        double newX = x*Math.cos(-angle) - y*Math.sin(-angle);
+        double newY = x*Math.sin(-angle) + y*Math.cos(-angle);
 
-        drive(newX, newY, r);
+        drive(newX,newY, r);
     }
 }
 //Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

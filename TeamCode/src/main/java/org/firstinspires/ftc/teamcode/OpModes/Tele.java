@@ -13,6 +13,7 @@ public class Tele extends OpMode {
     MecanumDrive Drive = new MecanumDrive();
     boolean wasRB1;
     boolean wasLB1;
+    boolean wasOptions;
 
     @Override
     public void init(){
@@ -42,6 +43,9 @@ public class Tele extends OpMode {
             Drive.driveFieldPerspective(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             telemetry.addData("Drive Mode", "Field Relative");
         }
+        if (gamepad1.options && !wasOptions){
+            hw.imu.resetYaw();
+        }
 
         if(gamepad1.left_bumper && !wasLB1){
             Drive.maxSpeed = 0.5;
@@ -59,6 +63,7 @@ public class Tele extends OpMode {
         }*/
         wasRB1 = gamepad1.right_bumper;
         wasLB1 = gamepad1.left_bumper;
+        wasOptions = gamepad1.options;
     }
 
     @Override
