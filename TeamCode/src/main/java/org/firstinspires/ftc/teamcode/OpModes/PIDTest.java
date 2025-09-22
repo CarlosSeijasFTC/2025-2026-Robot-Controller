@@ -20,5 +20,6 @@ public class PIDTest extends LinearOpMode {
         waitForStart();
 
         methods.MoveToPosition(motor1, 100, 0.1, 0, 0);
+        stop();
     }
 }
