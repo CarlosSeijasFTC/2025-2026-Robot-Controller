@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 public class MotorMethods {
     public void MoveToPosition(DcMotor motor, int targetPos, double k_p, double k_i, double k_d){
         ElapsedTime time = new ElapsedTime();
-        int accuracy = 1;
+        int accuracy = 2;
         double previousTime = 0, previousError = 0;
         double p = 0, i = 0, d = 0;
         double max_i = 0.2, min_i = -0.2;
@@ -23,9 +23,9 @@ public class MotorMethods {
 
             power = p + i + d;
             motor.setPower(power);
-
             previousError = error;
             previousTime = currentTime;
         }
+        motor.setPower(0);
     }
 }
