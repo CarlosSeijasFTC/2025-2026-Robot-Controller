@@ -17,9 +17,11 @@ public class PIDTest extends LinearOpMode {
         motor1 = hardwareMap.get(DcMotor.class, "motor1");
         motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        waitForStart();
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         methods.MoveToPosition(motor1, 100, 0.1, 0, 0);
+
+        waitForStart();
         stop();
     }
 }
