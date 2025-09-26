@@ -1,17 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Methods.MotorMethods;
 import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetitionMotors;
-
-import java.util.List;
 
 @Autonomous(name = "newPID")
 public class NewPIDTest extends OpMode {
@@ -46,7 +41,7 @@ public class NewPIDTest extends OpMode {
 
             p = k_p*error;
             i += k_i * (error * (currentTime - previousTime));
-            Range.clip(i, min_i, max_i);
+            i = Range.clip(i, min_i, max_i);
             d= k_d * ((error - previousError)/(currentTime - previousTime));
 
             power = p + i + d;
@@ -59,3 +54,4 @@ public class NewPIDTest extends OpMode {
         motor.setPower(0);
     }
 }
+//Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

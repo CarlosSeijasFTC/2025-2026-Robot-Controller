@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -19,6 +21,10 @@ public class DevicesForCompetition {
     private Servo servo1;
     private Servo servo2;
     public IMU imu;
+    public OctoQuad octoQuad;
+    public OdometryPod leftEnc = new OdometryPod(octoQuad, 0, OctoQuad.EncoderDirection.FORWARD);
+    public OdometryPod rightEnc = new OdometryPod(octoQuad, 1, OctoQuad.EncoderDirection.FORWARD);
+    public OdometryPod normalEnc = new OdometryPod(octoQuad, 2, OctoQuad.EncoderDirection.FORWARD);
 
 
     public void init( HardwareMap hwMp){
@@ -33,6 +39,7 @@ public class DevicesForCompetition {
         servo1 = hwMp.get(Servo.class, "servo1");
         servo2 = hwMp.get(Servo.class, "servo2");
         imu = hwMp.get(IMU.class, "imu");
+        octoQuad = hwMp.get(OctoQuad.class, "octoQuad");
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -43,6 +50,10 @@ public class DevicesForCompetition {
         motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        octoQuad.saveParametersToFlash();
+        octoQuad.resetAllPositions();
+        octoQuad.setCachingMode(OctoQuad.CachingMode.AUTO);
 
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         imu.initialize(new IMU.Parameters(RevOrientation));
