@@ -16,6 +16,7 @@ public class Auto extends OpMode {
     Odometry localization = new Odometry();
     DevicesForCompetition hw = new DevicesForCompetition();
     MecanumDrive drive = new MecanumDrive();
+    String state = "START";
 
     @Override
     public void init() {
@@ -23,8 +24,17 @@ public class Auto extends OpMode {
     }
 
     @Override
-    public void loop() {
+    public void start(){
+        state = "LOADED_START";
+    }
 
+    @Override
+    public void loop() {
+        telemetry.addData("State", state);
+        switch (state){
+            case "LOADED_START":
+
+        }
     }
 
     /**
@@ -44,7 +54,7 @@ public class Auto extends OpMode {
         double previousY = 0;
         double previousTheta = 0;
         while(timer.milliseconds() <= maxTime && (Math.abs(xError) >= MOE || Math.abs(yError) >= MOE || Math.abs(angleError) >= angleMOE)){
-            localization.updatePosition(hw.leftEnc.getOdometryPodTicks(), hw.rightEnc.getOdometryPodTicks(), hw.normalEnc.getOdometryPodTicks(), hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            localization.updatePosition(hw.getLeftEncTicks(), hw.getRightEncTicks(), hw.getNormalEncTicks(), hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             double k_P = 0.05; //Tune this coefficient
             double currentTime = timer.milliseconds();
             xError = targetX - localization.getX();

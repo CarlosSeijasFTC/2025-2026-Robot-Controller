@@ -13,7 +13,14 @@ public class Tele extends OpMode {
     MecanumDrive Drive = new MecanumDrive();
     boolean wasRB1;
     boolean wasLB1;
-    boolean wasOptions;
+    boolean wasOptions1;
+    boolean wasA2;
+    boolean wasB2;
+    boolean wasRB2;
+    boolean wasLB2;
+    boolean shoot = false;
+
+    boolean intake = false;
 
     @Override
     public void init(){
@@ -43,7 +50,7 @@ public class Tele extends OpMode {
             Drive.driveFieldPerspective(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             telemetry.addData("Drive Mode", "Field Relative");
         }
-        if (gamepad1.options && !wasOptions){
+        if (gamepad1.options && !wasOptions1){
             hw.imu.resetYaw();
         }
 
@@ -55,6 +62,39 @@ public class Tele extends OpMode {
             telemetry.addData("Speed", "normal");
         }
 
+        if (!intake){
+            hw.intake(false);
+            telemetry.addData("intake", "off");
+            if (gamepad2.a && !wasA2){
+                intake = true;
+            }
+        }
+
+        if(intake){
+            hw.intake(true);
+            telemetry.addData("intake", "on");
+            if(gamepad2.b && !wasB2){
+                intake = false;
+            }
+        }
+
+        if (!shoot){
+            hw.shooting(false);
+            telemetry.addData("shooting", "off");
+            if (gamepad2.right_bumper && !wasRB2){
+                shoot = true;
+            }
+        }
+
+        if(shoot){
+            hw.intake(true);
+            telemetry.addData("shooting", "on");
+            if(gamepad2.left_bumper && !wasLB2){
+                shoot = false;
+            }
+        }
+
+
         /* if(getRuntime() > 85 && !endRumble){
             gamepad1.rumbleBlips(3);
             gamepad2.rumbleBlips(3);
@@ -63,7 +103,9 @@ public class Tele extends OpMode {
         }*/
         wasRB1 = gamepad1.right_bumper;
         wasLB1 = gamepad1.left_bumper;
-        wasOptions = gamepad1.options;
+        wasOptions1 = gamepad1.options;
+        wasA2 = gamepad2.a;
+        wasB2 = gamepad2.b;
     }
 
     @Override
