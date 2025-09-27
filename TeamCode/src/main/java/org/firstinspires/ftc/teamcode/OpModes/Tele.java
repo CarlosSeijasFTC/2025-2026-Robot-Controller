@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetition;
 
-@TeleOp(name = "Michael is P. Diddy's Son")
+@TeleOp(name = "Super Duper Fascinating TeleOp of Team 26725 (Cathedral Mechanicus)")
 public class Tele extends OpMode {
 
     boolean endRumble = false;
@@ -106,6 +106,8 @@ public class Tele extends OpMode {
         wasOptions1 = gamepad1.options;
         wasA2 = gamepad2.a;
         wasB2 = gamepad2.b;
+        wasRB2 = gamepad2.right_bumper;
+        wasLB2 = gamepad2.left_bumper;
     }
 
     @Override
