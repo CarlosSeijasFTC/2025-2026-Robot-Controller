@@ -3,14 +3,16 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetition;
+import org.firstinspires.ftc.teamcode.mechanisms.Odometry;
 
 @TeleOp(name = "Super Duper Fascinating TeleOp of Team 26725 (Cathedral Mechanicus)")
 public class Tele extends OpMode {
 
     boolean endRumble = false;
     DevicesForCompetition hw = new DevicesForCompetition();
-    MecanumDrive Drive = new MecanumDrive();
+    Odometry odo = new Odometry();
     boolean wasRB1;
     boolean wasLB1;
     boolean wasOptions1;
@@ -19,6 +21,8 @@ public class Tele extends OpMode {
     boolean wasRB2;
     boolean wasLB2;
     boolean shoot = false;
+    public double maxPower = 1.0;
+    public double maxSpeed = 1.0;
 
     boolean intake = false;
 
@@ -36,6 +40,7 @@ public class Tele extends OpMode {
 
     @Override
     public void loop(){
+        odo.updatePosition(hw.getLeftEncTicks(), hw.getRightEncTicks(), hw.getNormalEncTicks(), hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("status", "loop started! Good Luck");
         telemetry.addData("frontRight", hw.getFrontRightSpeed());
         telemetry.addData("frontLeft", hw.getFrontLeftSpeed());
@@ -43,22 +48,22 @@ public class Tele extends OpMode {
         telemetry.addData("backLeft", hw.getBackLeftSpeed());
         telemetry.addData("Time Elapsed", getRuntime());
 
-        if (gamepad1.right_bumper && !wasRB1){
-            Drive.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+        if (gamepad1.right_bumper){
+            drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             telemetry.addData("Drive Mode", "Bot Relative");
         }else {
-            Drive.driveFieldPerspective(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            driveFieldPerspective(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             telemetry.addData("Drive Mode", "Field Relative");
         }
         if (gamepad1.options && !wasOptions1){
             hw.imu.resetYaw();
         }
 
-        if(gamepad1.left_bumper && !wasLB1){
-            Drive.maxSpeed = 0.5;
+        if(gamepad1.left_bumper){
+            maxSpeed = 0.5;
             telemetry.addData("Speed", "slow");
         }else {
-            Drive.maxSpeed = 1;
+            maxSpeed = 1;
             telemetry.addData("Speed", "normal");
         }
 
@@ -94,6 +99,11 @@ public class Tele extends OpMode {
             }
         }
 
+        telemetry.addData("x", odo.getX());
+        telemetry.addData("y", odo.getY());
+        telemetry.addData("odo angle", odo.getAngle());
+        telemetry.addData("imu angle", hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+
 
         /* if(getRuntime() > 85 && !endRumble){
             gamepad1.rumbleBlips(3);
@@ -114,6 +124,33 @@ public class Tele extends OpMode {
     public void stop(){
         telemetry.clearAll();
         telemetry.addData("status", "stopped");
+    }
+    public void drive(double x, double y, double r){
+        x = x*1.1;
+        double frontRightPower = -x + y - r;
+        double frontLeftPower = x + y + r;
+        double backRightPower = x + y - r;
+        double backLeftPower = -x + y + r;
+
+
+        maxPower = Math.max(maxPower, Math.abs(frontRightPower));
+        maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
+        maxPower = Math.max(maxPower, Math.abs(backRightPower));
+        maxPower = Math.max(maxPower, Math.abs(backLeftPower));
+
+        hw.setFrontRightSpeed(maxSpeed * (frontRightPower/maxPower));
+        hw.setFrontLeftSpeed(maxSpeed * (frontLeftPower/maxPower));
+        hw.setBackRightSpeed(maxSpeed * (backRightPower/maxPower));
+        hw.setBackLeftSpeed(maxSpeed * (backLeftPower/maxPower));
+    }
+
+    public void driveFieldPerspective(double x, double y, double r){
+        double angle = hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        angle = AngleUnit.normalizeRadians(angle);
+        double newX = x*Math.cos(-angle) - y*Math.sin(-angle);
+        double newY = x*Math.sin(-angle) + y*Math.cos(-angle);
+
+        drive(newX,newY, r);
     }
 }
 //Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

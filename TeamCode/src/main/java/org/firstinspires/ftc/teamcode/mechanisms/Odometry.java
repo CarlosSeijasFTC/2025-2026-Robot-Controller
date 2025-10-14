@@ -5,8 +5,8 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 public class Odometry {
     private final double ENCODER_WHEEL_DIAMETER = 4.8;
     private final double ENCODER_TICKS_PER_REVOLUTION = 2000;
-    private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * Math.sqrt(ENCODER_WHEEL_DIAMETER/2); //change this
-    private final double ENCODER_WIDTH = 12; //claculate this
+    private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * Math.sqrt(ENCODER_WHEEL_DIAMETER/2);
+    private final double ENCODER_WIDTH = 40;
 
     private double xPos, yPos, angle;
     private double lastLeftEnc, lastRightEnc, lastNormalEnc;
@@ -94,8 +94,5 @@ public class Odometry {
         this.angle = angle;
     }
 
-    private String format(double num) {
-        return String.format("%.3f", num);
-    }
 }
 //Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

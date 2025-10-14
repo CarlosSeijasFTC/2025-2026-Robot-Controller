@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.Odometry;
 public class Auto extends OpMode {
     Odometry localization = new Odometry();
     DevicesForCompetition hw = new DevicesForCompetition();
-    MecanumDrive drive = new MecanumDrive();
+    MecanumDrive drive = new MecanumDrive(hardwareMap);
     String state = "START";
 
     @Override

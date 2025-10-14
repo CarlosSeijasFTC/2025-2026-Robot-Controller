@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -13,6 +14,10 @@ public class MecanumDrive {
     public double maxSpeed = 1.0;
 
     DevicesForCompetition hw = new DevicesForCompetition();
+
+    public MecanumDrive(HardwareMap hardwareMap){
+        hw.init(hardwareMap);
+    }
 
     public void drive(double x, double y, double r){
         x = x*1.1;

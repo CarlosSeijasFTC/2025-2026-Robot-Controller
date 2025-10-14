@@ -20,11 +20,9 @@ public class DevicesForCompetition {
     private DcMotor leftShooter;
     private DcMotor motor4;
     private CRServo[] servos = new CRServo[4];
-    private String[] servoNames = new String[]{"frontLeft", "backLeft", "frontRight", "backRight"};
+    private String[] servoNames = new String[]{"frontLefts", "backLefts", "frontRights", "backRights"};
     public IMU imu;
-    private DcMotorEx leftEnc;
-    private DcMotorEx rightEnc;
-    private DcMotorEx normalEnc;
+
 
     public HuskyLens lens;
 
@@ -36,16 +34,12 @@ public class DevicesForCompetition {
         backLeft = hwMp.get(DcMotor.class, "backLeft");
         backRight = hwMp.get(DcMotor.class, "backRight");
 
-        leftEnc = hwMp.get(DcMotorEx.class, "leftEnc");
-        rightEnc = hwMp.get(DcMotorEx.class, "rightEnc");
-        normalEnc = hwMp.get(DcMotorEx.class, "normalEnc");
-
-        intake = hwMp.get(DcMotor.class, "intake");
-        rightShooter = hwMp.get(DcMotor.class, "rightShooter");
-        leftShooter = hwMp.get(DcMotor.class, "leftShooter");
+        intake = hwMp.get(DcMotor.class, "intakeNormalEnc");
+        rightShooter = hwMp.get(DcMotor.class, "rightShooterRightEnc");
+        leftShooter = hwMp.get(DcMotor.class, "leftShooterLeftEnc");
         motor4 = hwMp.get(DcMotor.class, "motor4");
 
-        for(int i=0; i <= 4; i++) {
+        for(int i=0; i <= 3; i++) {
         servos[i] = hwMp.get(CRServo.class, servoNames[i]);
         }
 
@@ -63,13 +57,6 @@ public class DevicesForCompetition {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftEnc.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightEnc.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        normalEnc.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftEnc.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightEnc.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        normalEnc.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -86,7 +73,7 @@ public class DevicesForCompetition {
         rightShooter.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        for(int i=0; i <=2; i++){
+        for(int i=0; i <=1; i++){
             servos[i].setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
@@ -96,8 +83,9 @@ public class DevicesForCompetition {
 
 
 
-        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
+        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD, RevHubOrientationOnRobot.UsbFacingDirection.UP);
         imu.initialize(new IMU.Parameters(RevOrientation));
+        imu.resetYaw();
 
 
     }
@@ -123,13 +111,13 @@ public class DevicesForCompetition {
     public void intake(boolean on) {
         if(on){
             intake.setPower(1);
-            for(int i=0; i <= 4; i++){
+            for(int i=0; i <= 3; i++){
                 servos[i].setPower(1);
             }
         }
         if(!on){
             intake.setPower(0);
-            for(int i=0; i <= 4; i++){
+            for(int i=0; i <= 3; i++){
                 servos[i].setPower(0);
             }
         }
@@ -166,13 +154,13 @@ public class DevicesForCompetition {
     }
 
     public double getLeftEncTicks(){
-        return leftEnc.getCurrentPosition();
+        return -leftShooter.getCurrentPosition();
     }
     public double getRightEncTicks(){
-        return rightEnc.getCurrentPosition();
+        return -rightShooter.getCurrentPosition();
     }
     public double getNormalEncTicks(){
-        return normalEnc.getCurrentPosition();
+        return -intake.getCurrentPosition();
     }
 }
 //Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode
