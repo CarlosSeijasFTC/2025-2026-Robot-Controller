@@ -18,9 +18,9 @@ public class DevicesForCompetition {
     private DcMotor intake;
     private DcMotor rightShooter;
     private DcMotor leftShooter;
-    private DcMotor motor4;
+    private DcMotor belt;
     private CRServo[] servos = new CRServo[4];
-    private String[] servoNames = new String[]{"frontLefts", "backLefts", "frontRights", "backRights"};
+    private String[] servoNames = new String[]{"bands", "backLefts", "frontRights", "backRights"};
     public IMU imu;
 
 
@@ -37,7 +37,7 @@ public class DevicesForCompetition {
         intake = hwMp.get(DcMotor.class, "intakeNormalEnc");
         rightShooter = hwMp.get(DcMotor.class, "rightShooterRightEnc");
         leftShooter = hwMp.get(DcMotor.class, "leftShooterLeftEnc");
-        motor4 = hwMp.get(DcMotor.class, "motor4");
+        belt = hwMp.get(DcMotor.class, "belt");
 
         for(int i=0; i <= 3; i++) {
         servos[i] = hwMp.get(CRServo.class, servoNames[i]);
@@ -57,25 +57,23 @@ public class DevicesForCompetition {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightShooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftShooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        belt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        belt.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rightShooter.setDirection(DcMotorSimple.Direction.REVERSE);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        for(int i=0; i <=1; i++){
-            servos[i].setDirection(DcMotorSimple.Direction.REVERSE);
-        }
 
         lens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
 
@@ -83,7 +81,7 @@ public class DevicesForCompetition {
 
 
 
-        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD, RevHubOrientationOnRobot.UsbFacingDirection.UP);
+        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
         imu.initialize(new IMU.Parameters(RevOrientation));
         imu.resetYaw();
 
@@ -104,33 +102,81 @@ public class DevicesForCompetition {
         backLeft.setPower(speed);
     }
     public void setMotor4Speed (double speed){
-        motor4.setPower(speed);
+        belt.setPower(speed);
+    }
+    public void setShooting(double speed){
+        rightShooter.setPower(speed);
+        leftShooter.setPower(speed);
     }
 
 
-    public void intake(boolean on) {
-        if(on){
-            intake.setPower(1);
-            for(int i=0; i <= 3; i++){
-                servos[i].setPower(1);
-            }
-        }
-        if(!on){
-            intake.setPower(0);
-            for(int i=0; i <= 3; i++){
-                servos[i].setPower(0);
-            }
+    public void intake(int cosa) {
+        int modulo = cosa % 2;
+        switch (modulo){
+            case 0:
+                intake.setPower(0);
+                break;
+            case 1:
+                intake.setPower(1);
+                break;
         }
     }
 
-    public void shooting(boolean on){
-        if(on){
-            leftShooter.setPower(1);
-            rightShooter.setPower(1);
+    public void belt(int cosa){
+        int modulo = cosa % 2;
+        switch (modulo){
+            case 0:
+                belt.setPower(0);
+                servos[0].setPower(0);
+                break;
+            case 1:
+                belt.setPower(0.8);
+                servos[0].setPower(1);
+                break;
         }
-        if(!on){
-            leftShooter.setPower(0);
-            rightShooter.setPower(0);
+    }
+
+    public void shootingTest(int on){
+        int module = on % 6;
+        switch (module){
+            case 0:
+                leftShooter.setPower(0);
+                rightShooter.setPower(0);
+                break;
+            case 1:
+                leftShooter.setPower(0.75);
+                rightShooter.setPower(0.75);
+                break;
+            case 2:
+                leftShooter.setPower(0.80);
+                rightShooter.setPower(0.80);
+                break;
+            case 3:
+                rightShooter.setPower(0.85);
+                leftShooter.setPower(0.85);
+                break;
+            case 4:
+                leftShooter.setPower(0.9);
+                rightShooter.setPower(0.9);
+                break;
+            case 5:
+                leftShooter.setPower(1);
+                rightShooter.setPower(1);
+                break;
+        }
+    }
+
+    public void shoot(int on){
+        int module = on %2;
+        switch (module){
+            case 0:
+                leftShooter.setPower(0);
+                rightShooter.setPower(0);
+                break;
+            case 1:
+                leftShooter.setPower(1);
+                rightShooter.setPower(1);
+                break;
         }
     }
 
@@ -150,11 +196,11 @@ public class DevicesForCompetition {
         return backLeft.getPower();
     }
     public double getMotor4Speed(){
-        return motor4.getPower();
+        return belt.getPower();
     }
 
     public double getLeftEncTicks(){
-        return -leftShooter.getCurrentPosition();
+        return leftShooter.getCurrentPosition();
     }
     public double getRightEncTicks(){
         return -rightShooter.getCurrentPosition();

@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -11,12 +9,13 @@ import org.firstinspires.ftc.teamcode.mechanisms.DevicesForCompetition;
 import org.firstinspires.ftc.teamcode.mechanisms.Odometry;
 
 
-@Autonomous(name = "26725 Super Duper Fascinating Autonomous Code, Ohh Yeah")
-public class Auto extends OpMode {
+@Autonomous(name = "Auto Red Left")
+public class AutoRedLeft extends OpMode {
     Odometry localization = new Odometry();
     DevicesForCompetition hw = new DevicesForCompetition();
-    MecanumDrive drive = new MecanumDrive(hardwareMap);
     String state = "START";
+    public double maxPower = 1.0;
+    public double maxSpeed = 1.0;
 
     @Override
     public void init() {
@@ -26,14 +25,13 @@ public class Auto extends OpMode {
     @Override
     public void start(){
         state = "LOADED_START";
+        resetRuntime();
     }
 
     @Override
     public void loop() {
-        telemetry.addData("State", state);
-        switch (state){
-            case "LOADED_START":
-
+        while (getRuntime() < 2){
+            drive(1, 0, 0);
         }
     }
 
@@ -73,7 +71,7 @@ public class Auto extends OpMode {
             double yPow = yP + yD;
             double anglePow = thetaP + thetaD;
 
-            drive.driveFieldPerspective(xPow, yPow, anglePow);
+            driveFieldPerspective(xPow, yPow, anglePow);
 
             previousX = xError;
             previousY = yError;
@@ -111,6 +109,33 @@ public class Auto extends OpMode {
         }
 
         return scaledAngle;
+    }
+    public void drive(double x, double y, double r){
+        x = x*1.1;
+        double frontRightPower = -x + y - r;
+        double frontLeftPower = x + y + r;
+        double backRightPower = x + y - r;
+        double backLeftPower = -x + y + r;
+
+
+        maxPower = Math.max(maxPower, Math.abs(frontRightPower));
+        maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
+        maxPower = Math.max(maxPower, Math.abs(backRightPower));
+        maxPower = Math.max(maxPower, Math.abs(backLeftPower));
+
+        hw.setFrontRightSpeed(maxSpeed * (frontRightPower/maxPower));
+        hw.setFrontLeftSpeed(maxSpeed * (frontLeftPower/maxPower));
+        hw.setBackRightSpeed(maxSpeed * (backRightPower/maxPower));
+        hw.setBackLeftSpeed(maxSpeed * (backLeftPower/maxPower));
+    }
+
+    public void driveFieldPerspective(double x, double y, double r){
+        double angle = hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        angle = AngleUnit.normalizeRadians(angle);
+        double newX = x*Math.cos(-angle) - y*Math.sin(-angle);
+        double newY = x*Math.sin(-angle) + y*Math.cos(-angle);
+
+        drive(newX,newY, r);
     }
 }
 //Carlos Seijas, FTC Team 26725 - Cathedral Mechanicus, 2025-2026 Season Decode

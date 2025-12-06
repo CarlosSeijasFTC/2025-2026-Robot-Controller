@@ -5,10 +5,10 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 public class Odometry {
     private final double ENCODER_WHEEL_DIAMETER = 4.8;
     private final double ENCODER_TICKS_PER_REVOLUTION = 2000;
-    private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * Math.sqrt(ENCODER_WHEEL_DIAMETER/2);
+    private final double ENCODER_WHEEL_CIRCUMFERENCE = Math.PI * ENCODER_WHEEL_DIAMETER;
     private final double ENCODER_WIDTH = 40;
 
-    private double xPos, yPos, angle;
+    private double xPos, yPos, angle, avgAngle;
     private double lastLeftEnc, lastRightEnc, lastNormalEnc;
     public Odometry(double xPos, double yPos, double angle){
         this.xPos = xPos;
@@ -37,21 +37,24 @@ public class Odometry {
         double dL = l - lastLeftEnc;
         double dN = n - lastNormalEnc;
 
+        lastNormalEnc = n;
+        lastLeftEnc = l;
+        lastRightEnc = r;
+
+
         double rightDist = dR * ENCODER_WHEEL_CIRCUMFERENCE / ENCODER_TICKS_PER_REVOLUTION;
         double leftDist = -dL * ENCODER_WHEEL_CIRCUMFERENCE / ENCODER_TICKS_PER_REVOLUTION;
         double dyR = 0.5 * (rightDist + leftDist);
         double headingChangeRadians = (rightDist - leftDist) / ENCODER_WIDTH;
         double dxR = -dN * ENCODER_WHEEL_CIRCUMFERENCE / ENCODER_TICKS_PER_REVOLUTION;
-        double avgHeadingRadians = Math.toRadians(angle) + headingChangeRadians / 2.0;
+        double avgHeadingRadians = (Math.toRadians(angle) + headingChangeRadians) / 2.0;
         double cos = Math.cos(avgHeadingRadians);
         double sin = Math.sin(avgHeadingRadians);
 
-        xPos += dxR * sin + dyR * cos;
-        yPos += -dxR * cos + dyR * sin;
-        angle = normalizeAngle(ang);
-        lastNormalEnc = n;
-        lastLeftEnc = l;
-        lastRightEnc = r;
+        this.xPos += dxR * sin + dyR * cos;
+        this.yPos += -dxR * cos + dyR * sin;
+        this.angle = normalizeAngle(Math.toDegrees(avgHeadingRadians)*2);
+        this.avgAngle = (Math.toDegrees(angle) + ang);
     }
     public double normalizeAngle(double rawAngle) {
         double scaledAngle = rawAngle % 360;
@@ -69,6 +72,10 @@ public class Odometry {
 
     public double getAngle() {
         return angle;
+    }
+
+    public double getAvgAngle(){
+        return avgAngle;
     }
 
     public double getX() {
