@@ -109,7 +109,7 @@ public class Tele extends OpMode {
 
         telemetry.addData("x", odo.getX());
         telemetry.addData("y", odo.getY());
-        telemetry.addData("odo angle", odo.getAvgAngle());
+        telemetry.addData("odo angle", odo.getAngle());
         telemetry.addData("imu angle", hw.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
 
         if(gamepad1.a && !wasA1){

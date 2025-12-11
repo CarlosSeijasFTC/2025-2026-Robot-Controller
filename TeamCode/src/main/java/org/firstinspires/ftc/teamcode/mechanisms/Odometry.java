@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Odometry {
     private final double ENCODER_WHEEL_DIAMETER = 4.8;
@@ -47,13 +48,13 @@ public class Odometry {
         double dyR = 0.5 * (rightDist + leftDist);
         double headingChangeRadians = (rightDist - leftDist) / ENCODER_WIDTH;
         double dxR = -dN * ENCODER_WHEEL_CIRCUMFERENCE / ENCODER_TICKS_PER_REVOLUTION;
-        double avgHeadingRadians = (Math.toRadians(angle) + headingChangeRadians) / 2.0;
+        double avgHeadingRadians = Math.toRadians(angle) + headingChangeRadians / 2.0;
         double cos = Math.cos(avgHeadingRadians);
         double sin = Math.sin(avgHeadingRadians);
 
         this.xPos += dxR * sin + dyR * cos;
         this.yPos += -dxR * cos + dyR * sin;
-        this.angle = normalizeAngle(Math.toDegrees(avgHeadingRadians)*2);
+        this.angle = normalizeAngle(angle + Math.toDegrees(headingChangeRadians));
         this.avgAngle = (Math.toDegrees(angle) + ang);
     }
     public double normalizeAngle(double rawAngle) {
